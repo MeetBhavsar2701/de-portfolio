@@ -7,7 +7,7 @@
 - [x] 4 Mobile, performance and fallback
 - [x] 5 Tests and hardening
 - [x] 6 Deploy
-- [ ] 7 Final QA
+- [x] 7 Final QA
 
 ## Decisions
 - Completed Step 1 (Scaffolding): Vite + React 18 + TypeScript with Three.js, R3F, Rapier, Zustand, Vitest, Playwright, ESLint 9 flat config.
@@ -16,23 +16,27 @@
 - Completed Step 3 (Stations and Content): Built 6 procedural station set pieces, interactive accessible cards, SQL console with in-memory execution, Web Audio synthesizer, and comprehensive unit/e2e test coverage.
 - Completed Step 4 (Mobile, Performance, Fallback, PDF): Touch joystick, `/resume/` accessible 2D fallback, automated build-time PDF & OG image generation, WebGL capability check, vendor code-splitting (under 3.3 MB transfer), axe-core accessibility tests.
 - Completed Step 5 (Tests and Hardening): Canvas error boundary, WebGL context loss recovery, window blur input release, automated visitor playthrough test suite with zero console errors and zero failed requests.
-- Completed Step 6 (Deploy):
-  - Configured GitHub Pages workflow `.github/workflows/deploy.yml` with `actions/upload-pages-artifact` and `actions/deploy-pages`.
-  - Configured repository base path `BASE_PATH=/de-portfolio/` and site URL `https://meetbhavsar2701.github.io/de-portfolio`.
-  - Added live production smoke test suite in `tests/e2e/live.spec.ts`.
+- Completed Step 6 (Deploy): Deployed to GitHub Pages via automated workflow with verified live production smoke tests.
+- Completed Step 7 (Final QA): Full audit across Quality Bars documented in `docs/FINAL_QA.md` with 100% PASS marks. Confirmed clean repository (no secrets, no `reference/` directory, correct `CREDITS.md`).
 
 ## Placeholders to replace
-- Name: `Alex Rivera` (in `src/content/profile.ts`)
-- Headline: `Data Engineer Intern` (in `src/content/profile.ts`)
-- City/Country: `San Francisco, CA` (in `src/content/profile.ts`)
-- Email: `alex.rivera.de@example.com` (in `src/content/profile.ts`)
-- GitHub: `https://github.com/alexrivera-de` (in `src/content/profile.ts`)
-- LinkedIn: `https://linkedin.com/in/alexrivera-de` (in `src/content/profile.ts`)
-- About: `Aspiring Data Engineer with a focus on high-throughput stream ingestion and scalable distributed transformations...` (in `src/content/profile.ts`)
-- Education: `B.S. in Computer Science, State University, 2025` (in `src/content/profile.ts`)
-- Projects: `StreamPulse`, `LakeForge`, `TelemetrySync` (in `src/content/profile.ts`)
-- Internship/experience: `Data Platform Intern`, `Nexus Data Labs` (in `src/content/profile.ts`)
-- Certificates/achievements: `AWS Certified Data Engineer - Associate`, `1st Place - University Hackathon: Big Data Analytics Track`, `Dean’s Honor List: 2023 - 2024` (in `src/content/profile.ts`)
+Edit `src/content/profile.ts` to replace placeholder text with your real information:
+- **Name**: `Alex Rivera`
+- **Headline**: `Data Engineer Intern`
+- **City/Country**: `San Francisco, CA`
+- **Email**: `alex.rivera.de@example.com`
+- **GitHub**: `https://github.com/alexrivera-de`
+- **LinkedIn**: `https://linkedin.com/in/alexrivera-de`
+- **About**: `Aspiring Data Engineer with a focus on high-throughput stream ingestion and scalable distributed transformations...`
+- **Education**: `B.S. in Computer Science, State University, 2025`
+- **Projects**: `StreamPulse`, `LakeForge`, `TelemetrySync` (names, descriptions, stack tags, links)
+- **Internship/Experience**: `Data Platform Intern`, `Nexus Data Labs`, `Jun 2024 - Sep 2024` (and bullet points)
+- **Certificates/Achievements**: `AWS Certified Data Engineer - Associate`, `1st Place - University Hackathon: Big Data Analytics Track`, `Dean’s Honor List: 2023 - 2024`
+
+### How to update and redeploy in 3 steps:
+1. Edit your details in `src/content/profile.ts`.
+2. Commit your changes: `git commit -am "chore: update profile content"`.
+3. Push to GitHub: `git push origin main` (the site, PDF, and screenshots automatically rebuild and redeploy).
 
 ## Known issues
 - None.
