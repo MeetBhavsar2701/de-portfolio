@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useProgress } from '@react-three/drei';
 import { PROFILE } from '../content/profile';
 import { useStore, STATION_NAMES, STATION_COORDINATES, StationName } from '../lib/store';
+import { sound } from '../audio/SoundController';
+import { SQLConsole } from './SQLConsole';
+import { StationModal } from './StationModal';
 
 export function HUD() {
   const { progress } = useProgress();
@@ -10,11 +13,51 @@ export function HUD() {
   const toggleMute = useStore((state) => state.toggleMute);
   const requestTeleport = useStore((state) => state.requestTeleport);
 
-  // Hint fader: disappears after 8 seconds
+  const [isSQLOpen, setIsSQLOpen] = useState(false);
   const [showHint, setShowHint] = useState(true);
+
+  // Sync initial mute status from sound controller
   useEffect(() => {
+    const initialMuted = sound.getMuted();
+    if (useStore.getState().isMuted !== initialMuted) {
+      useStore.setState({ isMuted: initialMuted });
+    }
+  }, []);
+
+  // Update sound controller when mute changes
+  const handleToggleMute = () => {
+    sound.init();
+    const next = !isMuted;
+    toggleMute();
+    sound.setMute(next);
+  };
+
+  // Listen for user interaction to bootstrap Web Audio & toggle SQL console
+  useEffect(() => {
+    const handleFirstTouch = () => {
+      sound.init();
+      window.removeEventListener('pointerdown', handleFirstTouch);
+      window.removeEventListener('keydown', handleFirstTouch);
+    };
+    window.addEventListener('pointerdown', handleFirstTouch);
+    window.addEventListener('keydown', handleFirstTouch);
+
+    const handleBackquote = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+      if (e.code === 'Backquote' || e.key === '`' || e.key === '~') {
+        e.preventDefault();
+        setIsSQLOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleBackquote);
+
     const timer = setTimeout(() => setShowHint(false), 8000);
-    return () => clearTimeout(timer);
+    return () => {
+      window.removeEventListener('keydown', handleBackquote);
+      clearTimeout(timer);
+    };
   }, []);
 
   const isLoaded = progress >= 100;
@@ -72,7 +115,7 @@ export function HUD() {
           top: '20px',
           left: '20px',
           pointerEvents: 'auto',
-          background: 'rgba(15, 23, 42, 0.75)',
+          background: 'rgba(15, 23, 42, 0.85)',
           backdropFilter: 'blur(8px)',
           padding: '12px 18px',
           borderRadius: '10px',
@@ -89,7 +132,7 @@ export function HUD() {
         </div>
       </div>
 
-      {/* Top Right: Teleport Station Selector & Fast Links */}
+      {/* Top Right: Station Teleport + Controls */}
       <div
         style={{
           position: 'fixed',
@@ -102,12 +145,12 @@ export function HUD() {
           fontFamily: 'system-ui, sans-serif',
         }}
       >
-        {/* Teleport Dropdown / Buttons */}
+        {/* Teleport Selector */}
         <div
           style={{
-            background: 'rgba(15, 23, 42, 0.75)',
+            background: 'rgba(15, 23, 42, 0.85)',
             backdropFilter: 'blur(8px)',
-            padding: '6px 12px',
+            padding: '6px 10px',
             borderRadius: '8px',
             border: '1px solid rgba(56, 189, 248, 0.25)',
             display: 'flex',
@@ -139,11 +182,29 @@ export function HUD() {
           ))}
         </div>
 
+        {/* SQL Console Trigger Button */}
+        <button
+          onClick={() => setIsSQLOpen(true)}
+          style={{
+            background: 'rgba(15, 23, 42, 0.85)',
+            backdropFilter: 'blur(8px)',
+            color: '#38bdf8',
+            border: '1px solid rgba(56, 189, 248, 0.3)',
+            padding: '8px 12px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '0.85rem',
+            fontWeight: 600,
+          }}
+        >
+          SQL Console (`)
+        </button>
+
         {/* Skip to 2D Resume */}
         <a
           href="/resume"
           style={{
-            background: 'rgba(15, 23, 42, 0.75)',
+            background: 'rgba(15, 23, 42, 0.85)',
             backdropFilter: 'blur(8px)',
             color: '#38bdf8',
             border: '1px solid rgba(56, 189, 248, 0.3)',
@@ -161,10 +222,10 @@ export function HUD() {
 
         {/* Mute Button Toggle */}
         <button
-          onClick={toggleMute}
+          onClick={handleToggleMute}
           aria-label="Toggle Audio"
           style={{
-            background: 'rgba(15, 23, 42, 0.75)',
+            background: 'rgba(15, 23, 42, 0.85)',
             backdropFilter: 'blur(8px)',
             color: isMuted ? '#94a3b8' : '#38bdf8',
             border: '1px solid rgba(56, 189, 248, 0.3)',
@@ -205,6 +266,14 @@ export function HUD() {
         </div>
       )}
 
+      {/* Station Modal Overlay */}
+      <div style={{ pointerEvents: 'auto' }}>
+        <StationModal />
+      </div>
+
+      {/* SQL Console Overlay */}
+      <SQLConsole isOpen={isSQLOpen} onClose={() => setIsSQLOpen(false)} />
+
       {/* Bottom Hint */}
       {showHint && (
         <div
@@ -226,13 +295,12 @@ export function HUD() {
             pointerEvents: 'auto',
           }}
         >
-          Use <strong style={{ color: '#38bdf8' }}>WASD</strong> or{' '}
-          <strong style={{ color: '#38bdf8' }}>Arrows</strong> to drive & steer •{' '}
+          Use <strong style={{ color: '#38bdf8' }}>WASD</strong> to drive •{' '}
           <strong style={{ color: '#38bdf8' }}>SPACE</strong> to brake •{' '}
-          <strong style={{ color: '#38bdf8' }}>R</strong> to reset position
+          <strong style={{ color: '#38bdf8' }}>`</strong> for SQL console •{' '}
+          <strong style={{ color: '#38bdf8' }}>E / Esc</strong> to view station info
         </div>
       )}
     </div>
   );
 }
-

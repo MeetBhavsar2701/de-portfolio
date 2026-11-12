@@ -1,3 +1,4 @@
+import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
@@ -6,11 +7,10 @@ import * as THREE from 'three';
 import { PipelineWorld } from './world/PipelineWorld';
 import { Vehicle } from './vehicle/Vehicle';
 import { FollowCamera } from './vehicle/FollowCamera';
-import { StationPlatforms } from './stations/StationPlatforms';
+import { AllStations } from './stations/AllStations';
 import { HUD } from './ui/HUD';
 import { useStore, STATION_COORDINATES, StationName } from './lib/store';
 
-// Expose window.__portfolio test hooks for Playwright & diagnostics
 declare global {
   interface Window {
     __portfolio?: {
@@ -61,7 +61,6 @@ export function App() {
           const coords = STATION_COORDINATES[name];
           if (coords) {
             useStore.getState().requestTeleport([coords[0], 1.5, coords[2] + 4]);
-            // Also trigger station detection immediately for tests
             useStore.getState().setActiveStation(name);
           }
         },
@@ -95,13 +94,12 @@ export function App() {
         <Suspense fallback={null}>
           <Physics gravity={[0, -25, 0]}>
             <PipelineWorld />
-            <StationPlatforms />
+            <AllStations />
             <Vehicle />
           </Physics>
 
           <FollowCamera />
 
-          {/* Postprocessing Bloom and Vignette */}
           <EffectComposer>
             <Bloom
               luminanceThreshold={0.7}
@@ -116,5 +114,5 @@ export function App() {
     </div>
   );
 }
-export default App;
 
+export default App;

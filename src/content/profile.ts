@@ -1,4 +1,18 @@
-export interface Profile {
+export interface ProjectItem {
+  name: string;
+  description: string;
+  stack: string;
+  link: string;
+}
+
+export interface ExperienceItem {
+  role: string;
+  org: string;
+  dates: string;
+  bullets: string[];
+}
+
+export interface ProfileData {
   name: string;
   headline: string;
   cityCountry: string;
@@ -8,22 +22,12 @@ export interface Profile {
   about: string;
   education: string;
   skills: string[];
-  projects: Array<{
-    name: string;
-    description: string;
-    stack: string;
-    link: string;
-  }>;
-  experience: {
-    role: string;
-    org: string;
-    dates: string;
-    bullets: string[];
-  };
+  projects: ProjectItem[];
+  experience: ExperienceItem;
   achievements: string[];
 }
 
-export const PROFILE: Profile = {
+export const PROFILE: ProfileData = {
   name: 'Alex Rivera',
   headline: 'Data Engineer Intern',
   cityCountry: 'San Francisco, CA',
@@ -80,4 +84,3 @@ export const PROFILE: Profile = {
     'Dean’s Honor List: 2023 - 2024',
   ],
 };
-

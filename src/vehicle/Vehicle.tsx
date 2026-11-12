@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { VEHICLE_CONFIG } from './config';
 import { useInput } from '../lib/useInput';
 import { useStore } from '../lib/store';
+import { sound } from '../audio/SoundController';
 
 export function Vehicle() {
   const rigidBodyRef = useRef<RapierRigidBody>(null);
@@ -141,6 +142,10 @@ export function Vehicle() {
       const pulse = 1.0 + Math.sin(state.clock.elapsedTime * 6) * 0.2;
       coreMeshRef.current.scale.set(pulse, pulse, pulse);
     }
+
+    // Dynamic Engine pitch tracking vehicle velocity
+    const speed = Math.sqrt(linvel.x * linvel.x + linvel.z * linvel.z);
+    sound.updateEnginePitch(speed / VEHICLE_CONFIG.maxSpeed);
   });
 
   return (
