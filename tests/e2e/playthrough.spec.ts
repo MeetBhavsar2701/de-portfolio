@@ -20,7 +20,7 @@ test.describe('Visitor Full Experience Playthrough', () => {
     });
 
     // 1. Load production preview
-    await page.goto('/?e2e=1');
+    await page.goto('./?e2e=1');
 
     // Wait for canvas element
     const canvas = page.locator('canvas');
@@ -72,8 +72,8 @@ test.describe('Visitor Full Experience Playthrough', () => {
     await expect(muteBtn).toBeVisible();
     await muteBtn.click({ force: true });
 
-    // 5. Assert /resume.pdf responds with HTTP 200 and PDF content-type
-    const pdfResponse = await request.get('/resume.pdf');
+    // 5. Assert resume.pdf responds with HTTP 200 and PDF content-type
+    const pdfResponse = await request.get('./resume.pdf');
     expect(pdfResponse.status()).toBe(200);
     const contentType = pdfResponse.headers()['content-type'] || '';
     expect(contentType).toContain('application/pdf');

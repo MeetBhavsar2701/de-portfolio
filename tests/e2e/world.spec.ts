@@ -15,7 +15,7 @@ test.describe('3D Portfolio Full Experience & Accessibility E2E', () => {
     });
 
     // 1. Open preview build with ?e2e=1
-    await page.goto('/?e2e=1');
+    await page.goto('./?e2e=1');
 
     // 2. Wait for canvas element to be present and rendered
     const canvas = page.locator('canvas');
@@ -124,7 +124,7 @@ test.describe('3D Portfolio Full Experience & Accessibility E2E', () => {
 
   test('accessibility check with axe-core on HUD and 2D resume', async ({ page }) => {
     // 1. Check /resume/ page accessibility
-    await page.goto('/resume/');
+    await page.goto('./resume/');
     await expect(page.locator('h1')).toContainText('Alex Rivera');
 
     const resumeAxe = await new AxeBuilder({ page })
@@ -137,7 +137,7 @@ test.describe('3D Portfolio Full Experience & Accessibility E2E', () => {
     expect(criticalViolations).toHaveLength(0);
 
     // 2. Check 3D scene HUD overlay accessibility
-    await page.goto('/?e2e=1');
+    await page.goto('./?e2e=1');
     await page.waitForTimeout(2000);
 
     const hudAxe = await new AxeBuilder({ page })
@@ -161,7 +161,7 @@ test.describe('3D Portfolio Full Experience & Accessibility E2E', () => {
       };
     });
 
-    await page.goto('/');
+    await page.goto('./');
     // Check fallback notice or automatic redirect
     await expect(page.locator('text=3D Hardware Acceleration Unavailable')).toBeVisible({
       timeout: 5000,

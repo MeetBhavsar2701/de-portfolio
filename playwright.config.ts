@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const basePath = process.env.BASE_PATH || '/';
+const baseURL = `http://localhost:4173${basePath.endsWith('/') ? basePath : basePath + '/'}`;
+
 export default defineConfig({
   testIgnore: ['tests/e2e/live.spec.ts'],
   timeout: 120000,
@@ -10,7 +13,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:4173',
+    baseURL: baseURL,
     trace: 'on-first-retry',
   },
   webServer: {
