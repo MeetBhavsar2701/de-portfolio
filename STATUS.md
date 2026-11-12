@@ -18,6 +18,7 @@
 - Completed Step 5 (Tests and Hardening): Canvas error boundary, WebGL context loss recovery, window blur input release, automated visitor playthrough test suite with zero console errors and zero failed requests.
 - Completed Step 6 (Deploy): Deployed to GitHub Pages via automated workflow with verified live production smoke tests.
 - Completed Step 7 (Final QA): Full audit across Quality Bars documented in `docs/FINAL_QA.md` with 100% PASS marks. Confirmed clean repository (no secrets, no `reference/` directory, correct `CREDITS.md`).
+- Post-Deploy Fix: Fixed initial loader overlay in `src/ui/HUD.tsx` so procedural scenes without external GLTF assets smoothly progress to 100% and fade out, ensuring visitors never get stuck on "Initializing Data Pipeline World... 0%".
 
 ## Placeholders to replace
 Edit `src/content/profile.ts` to replace placeholder text with your real information:

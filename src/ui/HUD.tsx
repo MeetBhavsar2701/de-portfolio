@@ -16,6 +16,50 @@ export function HUD() {
   const [isSQLOpen, setIsSQLOpen] = useState(false);
   const [showHint, setShowHint] = useState(true);
 
+  // Progressive loading states with safety timeout for procedural scene
+  const [displayProgress, setDisplayProgress] = useState(0);
+  const [overlayVisible, setOverlayVisible] = useState(true);
+  const [overlayFading, setOverlayFading] = useState(false);
+
+  useEffect(() => {
+    // Fallback maximum safety timer: dismiss overlay in 1.2s no matter what
+    const safetyTimer = setTimeout(() => {
+      setDisplayProgress(100);
+      setOverlayFading(true);
+      setTimeout(() => setOverlayVisible(false), 400);
+    }, 1200);
+
+    // Procedural progress ticker
+    const interval = setInterval(() => {
+      setDisplayProgress((prev) => {
+        const next = prev + 12;
+        if (next >= 100) {
+          clearInterval(interval);
+          setOverlayFading(true);
+          setTimeout(() => setOverlayVisible(false), 400);
+          return 100;
+        }
+        return next;
+      });
+    }, 40);
+
+    return () => {
+      clearTimeout(safetyTimer);
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Also sync if useProgress actively reports > displayProgress
+  useEffect(() => {
+    if (progress > displayProgress) {
+      setDisplayProgress(Math.round(progress));
+      if (progress >= 100) {
+        setOverlayFading(true);
+        setTimeout(() => setOverlayVisible(false), 400);
+      }
+    }
+  }, [progress, displayProgress]);
+
   // Sync initial mute status from sound controller
   useEffect(() => {
     const initialMuted = sound.getMuted();
@@ -60,13 +104,12 @@ export function HUD() {
     };
   }, []);
 
-  const isLoaded = progress >= 100;
-
   return (
     <div style={{ pointerEvents: 'none' }} className="hud-root">
       {/* Loading Overlay */}
-      {!isLoaded && (
+      {overlayVisible && (
         <div
+          data-testid="loading-overlay"
           style={{
             position: 'fixed',
             inset: 0,
@@ -78,7 +121,9 @@ export function HUD() {
             justifyContent: 'center',
             color: '#f8fafc',
             fontFamily: 'system-ui, sans-serif',
-            pointerEvents: 'auto',
+            pointerEvents: overlayFading ? 'none' : 'auto',
+            opacity: overlayFading ? 0 : 1,
+            transition: 'opacity 0.4s ease-out',
           }}
         >
           <div style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem', color: '#38bdf8' }}>
@@ -95,15 +140,15 @@ export function HUD() {
           >
             <div
               style={{
-                width: `${progress}%`,
+                width: `${displayProgress}%`,
                 height: '100%',
                 background: 'linear-gradient(90deg, #0284c7, #38bdf8)',
-                transition: 'width 0.2s ease-out',
+                transition: 'width 0.15s ease-out',
               }}
             />
           </div>
           <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#94a3b8' }}>
-            {Math.round(progress)}%
+            {displayProgress}%
           </div>
         </div>
       )}

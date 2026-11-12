@@ -38,3 +38,4 @@ Live Production Site: https://meetbhavsar2701.github.io/de-portfolio/
 - **Auto-right & Respawn**: Vehicle automatically rights itself within 2 seconds if rolled over, and respawns cleanly if driven off boundaries.
 - **SQL Console**: Accessible with `` ` `` (backtick) or HUD button; answers `HELP`, `SHOW TABLES`, `SELECT * FROM skills`, and queries without errors.
 - **Synthesized Audio**: Web Audio API generates ambient hum, engine pitch modulation, and chime chords with persistent mute toggle.
+
