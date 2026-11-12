@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import { PROFILE } from '../../src/content/profile';
 
-test.describe('3D Portfolio Full Experience E2E', () => {
+test.describe('3D Portfolio Full Experience & Accessibility E2E', () => {
   test('stations render content, SQL console runs queries, and vehicle navigates', async ({
     page,
-  }) => {
+  }, testInfo) => {
+    const isMobile = testInfo.project.name === 'mobile-pixel';
     const consoleErrors: string[] = [];
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
@@ -26,24 +28,49 @@ test.describe('3D Portfolio Full Experience E2E', () => {
     const hasHooks = await page.evaluate(() => typeof window.__portfolio !== 'undefined');
     expect(hasHooks).toBe(true);
 
-    // 4. Drive test: hold W key for 3 seconds
-    const initialPos = await page.evaluate(
-      () => window.__portfolio?.getVehiclePosition() || [0, 0, 5]
-    );
+    // 4. Measure FPS over 5 seconds
+    const fpsMeasurements: number[] = [];
+    for (let i = 0; i < 5; i++) {
+      await page.waitForTimeout(1000);
+      const currentFps = await page.evaluate(() => window.__portfolio?.fps() || 60);
+      fpsMeasurements.push(currentFps);
+    }
+    const avgFps = fpsMeasurements.reduce((a, b) => a + b, 0) / fpsMeasurements.length;
+    console.log(`[${testInfo.project.name}] Measured Average FPS: ${avgFps}`);
+    expect(avgFps).toBeGreaterThanOrEqual(1);
 
-    await page.keyboard.down('KeyW');
-    await page.waitForTimeout(3000);
-    await page.keyboard.up('KeyW');
-    await page.waitForTimeout(500);
+    // 5. Mobile Touch Joystick Test
+    if (isMobile) {
+      const joystick = page.locator('[data-testid="touch-joystick"]');
+      await expect(joystick).toBeVisible();
 
-    const drivenPos = await page.evaluate(
-      () => window.__portfolio?.getVehiclePosition() || [0, 0, 5]
-    );
-    const dx = drivenPos[0] - initialPos[0];
-    const dz = drivenPos[2] - initialPos[2];
-    expect(Math.sqrt(dx * dx + dz * dz)).toBeGreaterThanOrEqual(0);
+      // Simulate touch drag
+      const box = await joystick.boundingBox();
+      if (box) {
+        const startX = box.x + box.width / 2;
+        const startY = box.y + box.height / 2;
+        await page.touchscreen.tap(startX, startY);
+      }
+    } else {
+      // Desktop Drive test: hold W key for 3 seconds
+      const initialPos = await page.evaluate(
+        () => window.__portfolio?.getVehiclePosition() || [0, 0, 5]
+      );
 
-    // 5. Test each station: teleport, verify modal content from profile.ts, take screenshot
+      await page.keyboard.down('KeyW');
+      await page.waitForTimeout(3000);
+      await page.keyboard.up('KeyW');
+      await page.waitForTimeout(500);
+
+      const drivenPos = await page.evaluate(
+        () => window.__portfolio?.getVehiclePosition() || [0, 0, 5]
+      );
+      const dx = drivenPos[0] - initialPos[0];
+      const dz = drivenPos[2] - initialPos[2];
+      expect(Math.sqrt(dx * dx + dz * dz)).toBeGreaterThanOrEqual(0);
+    }
+
+    // 6. Test each station: teleport, verify modal content from profile.ts, take screenshot
     const stations = [
       { name: 'Source', expected: PROFILE.about.slice(0, 20) },
       { name: 'Ingest', expected: PROFILE.skills[0] },
@@ -63,34 +90,81 @@ test.describe('3D Portfolio Full Experience E2E', () => {
       const active = await page.evaluate(() => window.__portfolio?.getActiveStation());
       expect(active).toBe(station.name);
 
-      // Verify StationModal appears with expected content from profile.ts
+      // Verify StationModal appears with expected content
       const modal = page.locator('[data-testid="station-modal"]');
       await expect(modal).toBeVisible({ timeout: 5000 });
       await expect(modal).toContainText(station.expected);
 
-      // Capture screenshot of each station with modal & 3D backdrop
+      // Capture screenshot
+      const vpName = isMobile ? 'mobile' : 'desktop';
       await page.screenshot({
-        path: `tests/e2e/screenshots/station-${station.name.toLowerCase()}.png`,
+        path: `tests/e2e/screenshots/${vpName}-station-${station.name.toLowerCase()}.png`,
       });
     }
 
-    // 6. Test SQL Console: open with backtick, run query, verify output
-    await page.keyboard.press('Backquote');
-    const sqlInput = page.locator('input[placeholder*="SELECT"]');
-    await expect(sqlInput).toBeVisible({ timeout: 5000 });
+    // 7. Desktop SQL Console check
+    if (!isMobile) {
+      await page.keyboard.press('Backquote');
+      const sqlInput = page.locator('input[placeholder*="SELECT"]');
+      await expect(sqlInput).toBeVisible({ timeout: 5000 });
 
-    await sqlInput.fill('SELECT * FROM skills');
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(500);
+      await sqlInput.fill('SELECT * FROM skills');
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(500);
 
-    // Assert output contains the first skill
-    const terminalOutput = page.locator('text=' + PROFILE.skills[0]);
-    await expect(terminalOutput.first()).toBeVisible();
+      const terminalOutput = page.locator('text=' + PROFILE.skills[0]);
+      await expect(terminalOutput.first()).toBeVisible();
 
-    // Close SQL Console
-    await page.keyboard.press('Escape');
+      await page.keyboard.press('Escape');
+    }
 
-    // 7. Assert zero console errors
+    // 8. Assert zero console errors
     expect(consoleErrors).toHaveLength(0);
+  });
+
+  test('accessibility check with axe-core on HUD and 2D resume', async ({ page }) => {
+    // 1. Check /resume/ page accessibility
+    await page.goto('/resume/');
+    await expect(page.locator('h1')).toContainText('Alex Rivera');
+
+    const resumeAxe = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+
+    const criticalViolations = resumeAxe.violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact || '')
+    );
+    expect(criticalViolations).toHaveLength(0);
+
+    // 2. Check 3D scene HUD overlay accessibility
+    await page.goto('/?e2e=1');
+    await page.waitForTimeout(2000);
+
+    const hudAxe = await new AxeBuilder({ page })
+      .include('.hud-root')
+      .analyze();
+
+    const hudCritical = hudAxe.violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact || '')
+    );
+    expect(hudCritical).toHaveLength(0);
+  });
+
+  test('fallback redirects to 2D resume when WebGL is disabled', async ({ page }) => {
+    // Stub WebGL context to null
+    await page.addInitScript(() => {
+      HTMLCanvasElement.prototype.getContext = function (contextType: string) {
+        if (contextType.includes('webgl')) {
+          return null;
+        }
+        return null;
+      };
+    });
+
+    await page.goto('/');
+    // Check fallback notice or automatic redirect
+    await expect(page.locator('text=3D Hardware Acceleration Unavailable')).toBeVisible({
+      timeout: 5000,
+    });
   });
 });

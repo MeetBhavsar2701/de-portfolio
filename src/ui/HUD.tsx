@@ -202,7 +202,8 @@ export function HUD() {
 
         {/* Skip to 2D Resume */}
         <a
-          href="/resume"
+          href="/resume/"
+          aria-label="Skip to 2D Resume"
           style={{
             background: 'rgba(15, 23, 42, 0.85)',
             backdropFilter: 'blur(8px)',
@@ -223,7 +224,7 @@ export function HUD() {
         {/* Mute Button Toggle */}
         <button
           onClick={handleToggleMute}
-          aria-label="Toggle Audio"
+          aria-label={isMuted ? 'Audio Off' : 'Audio On'}
           style={{
             background: 'rgba(15, 23, 42, 0.85)',
             backdropFilter: 'blur(8px)',

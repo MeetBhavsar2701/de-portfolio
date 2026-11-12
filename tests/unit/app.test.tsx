@@ -15,7 +15,7 @@ describe('HUD component', () => {
     const { getByText } = render(<HUD />);
     const link = getByText('Skip to 2D Resume');
     expect(link).toBeInTheDocument();
-    expect(link.getAttribute('href')).toBe('/resume');
+    expect(link.getAttribute('href')).toBe('/resume/');
   });
 });
 

@@ -1,11 +1,29 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   base: process.env.BASE_PATH || '/',
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        resume: resolve(__dirname, 'resume/index.html'),
+      },
+      output: {
+        manualChunks: {
+          'three-vendor': ['three'],
+          'react-vendor': ['react', 'react-dom'],
+          'rapier-vendor': ['@react-three/rapier'],
+          'r3f-vendor': ['@react-three/fiber', '@react-three/drei'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1200,
+  },
   server: {
     port: 5173,
     host: true,
@@ -13,9 +31,6 @@ export default defineConfig({
   preview: {
     port: 4173,
     host: true,
-  },
-  optimizeDeps: {
-    exclude: ['reference'],
   },
   test: {
     globals: true,

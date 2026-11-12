@@ -4,8 +4,8 @@
 - [x] 1 Scaffold
 - [x] 2 World and vehicle
 - [x] 3 Stations and content
-- [ ] 4 Mobile, performance and fallback
-- [ ] 5 Tests
+- [x] 4 Mobile, performance and fallback
+- [x] 5 Tests and hardening
 - [ ] 6 Deploy
 - [ ] 7 Final QA
 
@@ -13,18 +13,24 @@
 - Completed Step 1 (Scaffolding): Vite + React 18 + TypeScript with Three.js, R3F, Rapier, Zustand, Vitest, Playwright, ESLint 9 flat config.
 - Reference study completed in `docs/REFERENCE_NOTES.md` analyzing Bruno Simon's 2025 folio architecture (MIT License).
 - Completed Step 2 (World and Vehicle): Created responsive low-poly rover with pulsing cyan data core, WASD/arrows drive & steer, auto-righting mechanism, third-person dampened camera follow, dark navy grid pipeline world with 120 streaming instanced cyan/amber data packets, 6 circular stations with sensor colliders, glassmorphism HUD with live teleport controls, audio toggle, and `window.__portfolio` test hooks.
-- Completed Step 3 (Stations and Content):
-  - Built procedural set pieces for all 6 stations:
-    1. **Source**: Database cylinders and high-tech API arch with glowing holographic gyro rings.
-    2. **Ingest**: Conveyor belt with rotating rollers, billboard, and bumpable dynamic Kafka message crates (with rigid body sleeping for physics performance and collision blip audio).
-    3. **Transform**: Industrial forge furnace with glowing amber chamber, rotating Spark and dbt gears, rising spark particles, and floating interactive project cards with external GitHub links.
-    4. **Warehouse**: 3-tiered Medallion Lakehouse tower (Bronze, Silver, Gold glowing layers) and floating internship experience panel.
-    5. **Dashboard**: Wall of telemetry screens with live animated bar charts, rotating donut gauge, and achievements billboard.
-    6. **Output**: Monumental API gateway portal with direct links for GitHub, LinkedIn, and Download Resume (PDF).
-  - Built accessible `StationModal` card overlay with `Esc` to close and `E` to reopen, respecting `prefers-reduced-motion`.
-  - Implemented lightweight SQL interpreter in `src/lib/sql.ts` with terminal HUD overlay (toggled via `~`/`` ` `` or HUD button) supporting `HELP`, `SHOW TABLES`, `SELECT *`, specific column projection, `WHERE`, and `LIMIT` across `profile`, `skills`, `projects`, `experience`, `education`, and `certificates`.
-  - Created procedural Web Audio synthesizer in `src/audio/SoundController.ts` generating ambient hum, speed-tracked engine tone, bump impacts, and station entry chords with persistent localStorage mute toggle.
-  - Verified full test suite (`npm run verify`: 27 Vitest unit tests + Playwright E2E testing stations, SQL console, and vehicle navigation) with zero console errors.
+- Completed Step 3 (Stations and Content): Built 6 procedural station set pieces, interactive accessible cards, SQL console with in-memory execution, Web Audio synthesizer, and comprehensive unit/e2e test coverage.
+- Completed Step 4 (Mobile, Performance, Fallback, PDF):
+  - Touch joystick and action buttons for mobile devices.
+  - Multi-page build setup with `/resume/` entry (accessible 2D fallback with semantic HTML & zero WebGL requirements).
+  - Automated build-time generation of `resume.pdf` (A4 print layout) and `og-image.png` (1200x630 social preview).
+  - Device/WebGL detection in `src/lib/webglCheck.ts` with graceful fallback redirect.
+  - Code-split vendor chunks (`three-vendor`, `r3f-vendor`, `rapier-vendor`, `react-vendor`) with initial load transfer size under 3.3 MB (well below the 8 MB cap).
+  - Accessibility validation via `@axe-core/playwright` on both HUD and 2D resume.
+- Completed Step 5 (Tests and Hardening):
+  - Added React `CanvasErrorBoundary` and WebGL context loss/restoration handling.
+  - Handled window blur and tab switching to immediately release driving inputs.
+  - Added full end-to-end playthrough test (`tests/e2e/playthrough.spec.ts`) asserting full traversal, station interactions, SQL querying, mute toggling, PDF HTTP 200 checks, and 0 console errors / failed requests.
+  - Flake-free Playwright execution across Desktop Chromium and Mobile Pixel 7 viewports (8/8 tests passing reliably).
+  - Lighthouse audit recorded in `docs/QUALITY.md`:
+    - 2D Resume: Performance: 100, Accessibility: 100, Best Practices: 100, SEO: 100.
+    - 3D Portfolio: Accessibility: 92, Best Practices: 100, SEO: 100.
+  - Added GitHub Actions workflow `.github/workflows/ci.yml`.
+  - Added recruiter-ready `README.md` and complete attribution in `CREDITS.md`.
 
 ## Placeholders to replace
 - Name: `Alex Rivera` (in `src/content/profile.ts`)

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume - Alex Rivera | Data Engineer Intern</title>
+    <meta name="description" content="Accessible 2D Resume and Profile of Alex Rivera, Data Engineer Intern." />
+    <meta name="theme-color" content="#020617" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root {
+        --bg: #090d16;
+        --card-bg: #0f172a;
+        --text: #f8fafc;
+        --text-muted: #94a3b8;
+        --primary: #38bdf8;
+        --border: #1e293b;
+      }
+      @media print {
+        :root {
+          --bg: #ffffff;
+          --card-bg: #ffffff;
+          --text: #0f172a;
+          --text-muted: #475569;
+          --primary: #0284c7;
+          --border: #cbd5e1;
+        }
+        .no-print { display: none !important; }
+        body { padding: 0; background: #fff !important; color: #000 !important; }
+        .page { border: none !important; box-shadow: none !important; max-width: 100% !important; padding: 0 !important; }
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        padding: 32px 16px;
+      }
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--primary);
+        color: #000;
+        padding: 8px;
+        z-index: 100;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .skip-link:focus { top: 0; }
+      .page {
+        max-width: 820px;
+        margin: 0 auto;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 36px 48px;
+        box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+      }
+      header {
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 20px;
+        margin-bottom: 24px;
+      }
+      h1 { font-size: 2rem; color: var(--text); margin-bottom: 4px; }
+      .headline { font-size: 1.15rem; color: var(--primary); font-weight: 600; }
+      .contact-row {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+      .contact-row a { color: var(--primary); text-decoration: none; }
+      .contact-row a:hover { text-decoration: underline; }
+      section { margin-bottom: 24px; }
+      h2 {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--primary);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 4px;
+        margin-bottom: 12px;
+      }
+      .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .skill-pill {
+        background: #1e293b;
+        color: var(--text);
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid var(--border);
+      }
+      .item-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      .dates { color: var(--text-muted); font-size: 0.85rem; font-weight: 400; }
+      ul { padding-left: 20px; margin-top: 6px; font-size: 0.92rem; color: var(--text); }
+      li { margin-bottom: 4px; }
+      .actions-bar {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .btn {
+        background-color: #0369a1;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 2px solid #38bdf8;
+        color: #e0f2fe;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <div class="page">
+      <nav class="actions-bar no-print" aria-label="Resume Actions">
+        <a href="/" class="btn btn-outline" aria-label="Enter interactive 3D portfolio">← Back to 3D Experience</a>
+        <a href="/resume.pdf" class="btn" download="Alex_Rivera_Resume.pdf" aria-label="Download Resume PDF">Download Resume PDF ↓</a>
+      </nav>
+
+      <main id="main-content">
+        <header>
+          <h1>Alex Rivera</h1>
+          <div class="headline">Data Engineer Intern</div>
+          <div class="contact-row">
+            <span>San Francisco, CA</span>
+            <span>•</span>
+            <a href="mailto:alex.rivera.de@example.com">alex.rivera.de@example.com</a>
+            <span>•</span>
+            <a href="https://github.com/alexrivera-de" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+            <span>•</span>
+            <a href="https://linkedin.com/in/alexrivera-de" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
+          </div>
+        </header>
+
+        <section aria-labelledby="about-heading">
+          <h2 id="about-heading">Summary</h2>
+          <p>
+            Aspiring Data Engineer with a focus on high-throughput stream ingestion and scalable distributed transformations. Passionate about building robust, reproducible data pipelines using modern lakehouse architectures.
+          </p>
+        </section>
+
+        <section aria-labelledby="skills-heading">
+          <h2 id="skills-heading">Technical Skills</h2>
+          <div class="skills-grid">
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">SQL</span>
+            <span class="skill-pill">Spark</span>
+            <span class="skill-pill">Kafka</span>
+            <span class="skill-pill">Airflow</span>
+            <span class="skill-pill">dbt</span>
+            <span class="skill-pill">Docker</span>
+            <span class="skill-pill">AWS/GCP basics</span>
+            <span class="skill-pill">Git</span>
+          </div>
+        </section>
+
+        <section aria-labelledby="experience-heading">
+          <h2 id="experience-heading">Experience</h2>
+          <div style="margin-bottom: 12px;">
+            <div class="item-header">
+              <span>Data Platform Intern — Nexus Data Labs</span>
+              <span class="dates">Jun 2024 - Sep 2024</span>
+            </div>
+            <ul>
+              <li>Built automated streaming pipelines processing 1.5M daily events with Kafka and Spark.</li>
+              <li>Optimized warehouse partition schemes, reducing query latency by 35%.</li>
+              <li>Developed dbt data quality assertion tests to catch upstream schema drift.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section aria-labelledby="projects-heading">
+          <h2 id="projects-heading">Featured Projects</h2>
+          <div style="margin-bottom: 14px;">
+            <div class="item-header">
+              <span>StreamPulse</span>
+              <a href="https://github.com/example/streampulse" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-size: 0.85rem;">Source ↗</a>
+            </div>
+            <p style="font-size: 0.92rem; margin-top: 2px;">Real-time financial telemetry ingestion and anomaly detection pipeline.</p>
+            <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">Stack: Kafka, PySpark, Delta Lake, Docker</div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <div class="item-header">
+              <span>LakeForge</span>
+              <a href="https://github.com/example/lakeforge" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-size: 0.85rem;">Source ↗</a>
+            </div>
+            <p style="font-size: 0.92rem; margin-top: 2px;">Automated dbt transformation pipeline models for retail analytics.</p>
+            <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">Stack: dbt, DuckDB, Airflow, SQL</div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <div class="item-header">
+              <span>TelemetrySync</span>
+              <a href="https://github.com/example/telemetrysync" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-size: 0.85rem;">Source ↗</a>
+            </div>
+            <p style="font-size: 0.92rem; margin-top: 2px;">Distributed IoT metrics sync and aggregation with Parquet storage.</p>
+            <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">Stack: Python, FastAPI, Spark, AWS S3</div>
+          </div>
+        </section>
+
+        <section aria-labelledby="education-heading">
+          <h2 id="education-heading">Education</h2>
+          <div>
+            <div class="item-header">
+              <span>B.S. in Computer Science</span>
+              <span class="dates">State University, 2025</span>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="achievements-heading">
+          <h2 id="achievements-heading">Certificates & Achievements</h2>
+          <ul>
+            <li>AWS Certified Data Engineer - Associate</li>
+            <li>1st Place - University Hackathon: Big Data Analytics Track</li>
+            <li>Dean’s Honor List: 2023 - 2024</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
+
