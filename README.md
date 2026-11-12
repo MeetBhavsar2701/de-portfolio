@@ -1,5 +1,9 @@
 # 🚀 Interactive 3D Data Engineer Portfolio
 
+> **Live Deployment:** [https://meetbhavsar2701.github.io/de-portfolio/](https://meetbhavsar2701.github.io/de-portfolio/)  
+> **Accessible 2D Resume:** [https://meetbhavsar2701.github.io/de-portfolio/resume/](https://meetbhavsar2701.github.io/de-portfolio/resume/)  
+> **Download Resume PDF:** [https://meetbhavsar2701.github.io/de-portfolio/resume.pdf](https://meetbhavsar2701.github.io/de-portfolio/resume.pdf)
+
 A free-hosted, interactive 3D portfolio and resume experience built for a Data Engineer intern. Drive a small rover ("data packet carrier") through a pipeline-shaped world where each node highlights a section of my profile, skills, distributed transformation projects, and lakehouse experience.
 
 ![Portfolio Preview](./docs/preview.png)

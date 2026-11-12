@@ -125,7 +125,7 @@ export function App() {
           Redirecting you to the fast, accessible 2D resume...
         </p>
         <a
-          href="/resume/"
+          href={`${import.meta.env.BASE_URL || '/'}resume/`}
           style={{
             background: '#0284c7',
             color: '#ffffff',

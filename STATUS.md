@@ -6,7 +6,7 @@
 - [x] 3 Stations and content
 - [x] 4 Mobile, performance and fallback
 - [x] 5 Tests and hardening
-- [ ] 6 Deploy
+- [x] 6 Deploy
 - [ ] 7 Final QA
 
 ## Decisions
@@ -14,23 +14,12 @@
 - Reference study completed in `docs/REFERENCE_NOTES.md` analyzing Bruno Simon's 2025 folio architecture (MIT License).
 - Completed Step 2 (World and Vehicle): Created responsive low-poly rover with pulsing cyan data core, WASD/arrows drive & steer, auto-righting mechanism, third-person dampened camera follow, dark navy grid pipeline world with 120 streaming instanced cyan/amber data packets, 6 circular stations with sensor colliders, glassmorphism HUD with live teleport controls, audio toggle, and `window.__portfolio` test hooks.
 - Completed Step 3 (Stations and Content): Built 6 procedural station set pieces, interactive accessible cards, SQL console with in-memory execution, Web Audio synthesizer, and comprehensive unit/e2e test coverage.
-- Completed Step 4 (Mobile, Performance, Fallback, PDF):
-  - Touch joystick and action buttons for mobile devices.
-  - Multi-page build setup with `/resume/` entry (accessible 2D fallback with semantic HTML & zero WebGL requirements).
-  - Automated build-time generation of `resume.pdf` (A4 print layout) and `og-image.png` (1200x630 social preview).
-  - Device/WebGL detection in `src/lib/webglCheck.ts` with graceful fallback redirect.
-  - Code-split vendor chunks (`three-vendor`, `r3f-vendor`, `rapier-vendor`, `react-vendor`) with initial load transfer size under 3.3 MB (well below the 8 MB cap).
-  - Accessibility validation via `@axe-core/playwright` on both HUD and 2D resume.
-- Completed Step 5 (Tests and Hardening):
-  - Added React `CanvasErrorBoundary` and WebGL context loss/restoration handling.
-  - Handled window blur and tab switching to immediately release driving inputs.
-  - Added full end-to-end playthrough test (`tests/e2e/playthrough.spec.ts`) asserting full traversal, station interactions, SQL querying, mute toggling, PDF HTTP 200 checks, and 0 console errors / failed requests.
-  - Flake-free Playwright execution across Desktop Chromium and Mobile Pixel 7 viewports (8/8 tests passing reliably).
-  - Lighthouse audit recorded in `docs/QUALITY.md`:
-    - 2D Resume: Performance: 100, Accessibility: 100, Best Practices: 100, SEO: 100.
-    - 3D Portfolio: Accessibility: 92, Best Practices: 100, SEO: 100.
-  - Added GitHub Actions workflow `.github/workflows/ci.yml`.
-  - Added recruiter-ready `README.md` and complete attribution in `CREDITS.md`.
+- Completed Step 4 (Mobile, Performance, Fallback, PDF): Touch joystick, `/resume/` accessible 2D fallback, automated build-time PDF & OG image generation, WebGL capability check, vendor code-splitting (under 3.3 MB transfer), axe-core accessibility tests.
+- Completed Step 5 (Tests and Hardening): Canvas error boundary, WebGL context loss recovery, window blur input release, automated visitor playthrough test suite with zero console errors and zero failed requests.
+- Completed Step 6 (Deploy):
+  - Configured GitHub Pages workflow `.github/workflows/deploy.yml` with `actions/upload-pages-artifact` and `actions/deploy-pages`.
+  - Configured repository base path `BASE_PATH=/de-portfolio/` and site URL `https://meetbhavsar2701.github.io/de-portfolio`.
+  - Added live production smoke test suite in `tests/e2e/live.spec.ts`.
 
 ## Placeholders to replace
 - Name: `Alex Rivera` (in `src/content/profile.ts`)
@@ -49,5 +38,7 @@
 - None.
 
 ## Live URL
-- Repository: https://github.com/MeetBhavsar2701/de-portfolio
-- Live Deployment: TBD (Configured in Step 6)
+- **Production URL**: https://meetbhavsar2701.github.io/de-portfolio/
+- **2D Accessible Resume**: https://meetbhavsar2701.github.io/de-portfolio/resume/
+- **Automated Resume PDF**: https://meetbhavsar2701.github.io/de-portfolio/resume.pdf
+- **Repository**: https://github.com/MeetBhavsar2701/de-portfolio

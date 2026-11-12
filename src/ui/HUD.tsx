@@ -202,7 +202,7 @@ export function HUD() {
 
         {/* Skip to 2D Resume */}
         <a
-          href="/resume/"
+          href={`${import.meta.env.BASE_URL || '/'}resume/`}
           aria-label="Skip to 2D Resume"
           style={{
             background: 'rgba(15, 23, 42, 0.85)',
